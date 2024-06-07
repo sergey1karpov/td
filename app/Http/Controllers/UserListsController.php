@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\ListRequest;
+use App\Models\User;
+use App\Repositories\ListRepository;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+
+class UserListsController extends Controller
+{
+    public function __construct(private readonly ListRepository $listRepository) {}
+
+    public function create(User $user): View
+    {
+        return view('lists.create', compact('user'));
+    }
+
+    public function store(User $user, ListRequest $request): RedirectResponse
+    {
+        $this->listRepository->createList($user, $request->title, $request->description);
+
+        return redirect()->back()->with('success', 'List created');
+    }
+}

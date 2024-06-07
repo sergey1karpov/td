@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserListsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -9,3 +10,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::get('/{user}/list/create', [UserListsController::class, 'create'])->name('list.create');
+Route::post('/{user}/list/create', [UserListsController::class, 'store'])->name('list.store');
