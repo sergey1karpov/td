@@ -48,7 +48,7 @@ class User extends Authenticatable
 
     public function lists(): BelongsToMany
     {
-        return $this->belongsToMany(UserLists::class, 'lists_users', 'user_id', 'list_id')->withPivot('role');
+        return $this->belongsToMany(UserLists::class, 'lists_users', 'user_id', 'list_id');
     }
 
 //    public function lists(): BelongsToMany

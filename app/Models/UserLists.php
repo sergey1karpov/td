@@ -16,6 +16,6 @@ class UserLists extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'lists_users', 'list_id', 'id')->withPivot('role');
+        return $this->belongsToMany(User::class, 'lists_users', 'list_id', 'id');
     }
 }

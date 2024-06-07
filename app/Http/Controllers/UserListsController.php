@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ListRequest;
 use App\Models\User;
+use App\Models\UserLists;
 use App\Repositories\ListRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -22,5 +23,10 @@ class UserListsController extends Controller
         $this->listRepository->createList($user, $request->title, $request->description);
 
         return redirect()->back()->with('success', 'List created');
+    }
+
+    public function edit(User $user, UserLists $list): View
+    {
+        return view('lists.update', compact('user', 'list'));
     }
 }
