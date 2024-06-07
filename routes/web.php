@@ -19,3 +19,4 @@ Route::get('/{user}/list/create', [UserListsController::class, 'create'])->name(
 Route::post('/{user}/list/create', [UserListsController::class, 'store'])->name('list.store');
 Route::get('/{user}/list/{list}/edit', [UserListsController::class, 'edit'])->name('list.edit');
 Route::patch('/{user}/list/{list}/update', [UserListsController::class, 'update'])->name('list.update');
+Route::delete('/{user}/list/{list}/delete', [UserListsController::class, 'delete'])->name('list.delete');

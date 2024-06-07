@@ -22,7 +22,7 @@ class UserListsController extends Controller
     {
         $this->listRepository->createList($user, $request->title, $request->description);
 
-        return redirect()->back()->with('success', 'List created');
+        return redirect()->route('profile', ['user' => $user->id])->with('success', 'List created');
     }
 
     public function edit(User $user, UserLists $list): View
@@ -34,6 +34,13 @@ class UserListsController extends Controller
     {
         $this->listRepository->updateList($list, $request->title, $request->description);
 
-        return redirect()->back()->with('success', $user->name . ', you have successfully updated the list: ' . $list->title);
+        return redirect()->route('profile', ['user' => $user->id])->with('success', 'List updated');
+    }
+
+    public function delete(User $user, UserLists $list): RedirectResponse
+    {
+        $list->delete();
+
+        return redirect()->route('profile', ['user' => $user->id])->with('success', 'List deleted');
     }
 }
