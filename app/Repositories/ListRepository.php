@@ -24,4 +24,9 @@ class ListRepository
 
         $user->lists()->attach($list);
     }
+
+    public function updateList(UserLists $list, string $title, string $description): void
+    {
+        $list->update(['title' => $title, 'description' => $description]);
+    }
 }

@@ -48,7 +48,8 @@ class User extends Authenticatable
 
     public function lists(): BelongsToMany
     {
-        return $this->belongsToMany(UserLists::class, 'lists_users', 'user_id', 'list_id');
+        return $this->belongsToMany(UserLists::class, 'lists_users', 'user_id', 'list_id')
+            ->orderByDesc('created_at');
     }
 
 //    public function lists(): BelongsToMany

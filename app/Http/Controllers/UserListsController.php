@@ -29,4 +29,11 @@ class UserListsController extends Controller
     {
         return view('lists.update', compact('user', 'list'));
     }
+
+    public function update(User $user, UserLists $list, ListRequest $request): RedirectResponse
+    {
+        $this->listRepository->updateList($list, $request->title, $request->description);
+
+        return redirect()->back()->with('success', $user->name . ', you have successfully updated the list: ' . $list->title);
+    }
 }

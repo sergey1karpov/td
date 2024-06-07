@@ -6,6 +6,16 @@
             <div class="col-md-8">
                 <h3 class="mb-5">Create new list</h3>
 
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 @if(session()->has('success'))
                     <div class="alert alert-success text-center alert-dismissible fade show" role="alert">
                         <strong>{{ session()->get('success') }}</strong>
