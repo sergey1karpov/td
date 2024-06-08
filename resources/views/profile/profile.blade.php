@@ -26,10 +26,7 @@
                                 </div>
                                 <div>
                                     <div class="mb-1 text-end">
-                                        <a href="{{ route('list.edit', ['user' => $user->id, 'list' => $list->id]) }}" class="btn btn-success">Show List items</a>
-                                    </div>
-                                    <div class="mb-1 text-end">
-                                        <button type="button" class="btn btn-info">Add List element</button>
+                                        <a href="{{ route('list.show', ['user' => $user->id, 'list' => $list->id]) }}" class="btn btn-success">Show List items</a>
                                     </div>
                                     <div class="mb-1 text-end">
                                         <a href="{{ route('list.edit', ['user' => $user->id, 'list' => $list->id]) }}" class="btn btn-primary">Edit</a>

@@ -43,4 +43,11 @@ class UserListsController extends Controller
 
         return redirect()->route('profile', ['user' => $user->id])->with('success', 'List deleted');
     }
+
+    public function show(User $user, UserLists $list): View
+    {
+        $elements = $list->elements;
+
+        return view('lists.list', compact('user', 'list', 'elements'));
+    }
 }
