@@ -26,4 +26,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/{user}/list/{list}/add-element', [ListElementController::class, 'store'])->name('list-element.store');
     Route::get('/{user}/list/{list}/element/{element}', [ListElementController::class, 'show'])->name('list-element.show');
+    Route::get('/{user}/list/{list}/element/{element}/edit', [ListElementController::class, 'edit'])->name('list-element.edit');
+    Route::patch('/{user}/list/{list}/element/{element}/update', [ListElementController::class, 'update'])->name('list-element.update');
+    Route::delete('/{user}/list/{list}/element/{element}/delete-image', [ListElementController::class, 'deleteImage'])->name('list-element.delete-image');
+    Route::delete('/{user}/list/{list}/element/{element}/delete', [ListElementController::class, 'delete'])->name('list-element.delete');
 });

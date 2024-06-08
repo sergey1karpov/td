@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ImageRequest;
+use App\Http\Requests\ItemRequest;
+use App\Models\Image;
 use App\Models\ListElements;
 use App\Models\User;
 use App\Models\UserLists;
@@ -18,7 +19,7 @@ class ListElementController extends Controller
         private readonly ListElementRepository $listElementRepository)
     {}
 
-    public function store(User $user, UserLists $list, ImageRequest $request): RedirectResponse
+    public function store(User $user, UserLists $list, ItemRequest $request): RedirectResponse
     {
         $element = $list->elements()->create([
             'description' => $request->description,
@@ -26,9 +27,7 @@ class ListElementController extends Controller
 
         if ($request->hasFile('image')) {
             $imagePath = $this->imageService->uploadImage($request->file('image'));
-
             $thumbnailPath = $this->imageService->createThumbnail($request->file('image'), $imagePath);
-
             $this->listElementRepository->insertListItemImage($imagePath, $thumbnailPath, $element->id);
         }
 
@@ -38,5 +37,43 @@ class ListElementController extends Controller
     public function show(User $user, UserLists $list, ListElements $element): View
     {
         return view('list_element.show-element', compact('user', 'list', 'element'));
+    }
+
+    public function edit(User $user, UserLists $list, ListElements $element): View
+    {
+        return view('list_element.edit', compact('user', 'list', 'element'));
+    }
+
+    public function update(User $user, UserLists $list, ListElements $element, ItemRequest $request): RedirectResponse
+    {
+        $this->listElementRepository->updateListItem($element, $request->description);
+
+        if ($request->hasFile('image')) {
+
+            $this->listElementRepository->deleteListElementImage($element->id);
+
+            $imagePath = $this->imageService->uploadImage($request->file('image'));
+            $thumbnailPath = $this->imageService->createThumbnail($request->file('image'), $imagePath);
+            $this->listElementRepository->insertListItemImage($imagePath, $thumbnailPath, $element->id);
+        }
+
+        return redirect()->route('list-element.show', ['user' => $user->id, 'list' => $list->id, 'element' => $element->id])
+            ->with('success', 'Заметка обновлена!');
+    }
+
+    public function deleteImage(User $user, UserLists $list, ListElements $element): RedirectResponse
+    {
+        $this->listElementRepository->deleteListElementImage($element->id);
+
+        return redirect()->route('list-element.edit', ['user' => $user->id, 'list' => $list->id, 'element' => $element->id])
+            ->with('success', 'Изображение удалено!');
+    }
+
+    public function delete(User $user, UserLists $list, ListElements $element): RedirectResponse
+    {
+        $element->delete();
+
+        return redirect()->route('list.show', ['user' => $user->id, 'list' => $list->id])
+            ->with('success', 'Заметка удалена!');
     }
 }
