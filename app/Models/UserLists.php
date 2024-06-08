@@ -23,6 +23,7 @@ class UserLists extends Model
 
     public function elements(): HasMany
     {
-        return $this->hasMany(ListElements::class, 'list_id', 'id')->orderByDesc('created_at');
+        return $this->hasMany(ListElements::class, 'list_id', 'id')
+            ->orderByDesc('created_at');
     }
 }

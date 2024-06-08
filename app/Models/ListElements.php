@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class ListElements extends Model
 {
@@ -14,8 +15,8 @@ class ListElements extends Model
 
     protected $fillable = ['description', 'list_id'];
 
-    public function images(): HasMany
+    public function images(): HasOne
     {
-        return $this->hasMany(Image::class, 'list_element_id', 'id');
+        return $this->hasOne(Image::class, 'list_element_id', 'id')->select(['image', 'thumbnail']);
     }
 }

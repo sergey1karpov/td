@@ -25,4 +25,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/{user}/list/{list}/delete', [UserListsController::class, 'delete'])->name('list.delete');
 
     Route::post('/{user}/list/{list}/add-element', [ListElementController::class, 'store'])->name('list-element.store');
+    Route::get('/{user}/list/{list}/element/{element}', [ListElementController::class, 'show'])->name('list-element.show');
 });
