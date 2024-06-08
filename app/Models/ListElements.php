@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ListElements extends Model
 {
@@ -11,5 +12,10 @@ class ListElements extends Model
 
     protected $table = 'list_elements';
 
-    protected $fillable = ['description', 'image', 'list_id'];
+    protected $fillable = ['description', 'list_id'];
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(Image::class, 'list_element_id', 'id');
+    }
 }

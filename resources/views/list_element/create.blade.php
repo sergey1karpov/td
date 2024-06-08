@@ -1,4 +1,4 @@
-<form method="post" action="{{ route('list-element.store', ['user' => $user->id, 'list' => $list->id]) }}"> @csrf
+<form method="post" action="{{ route('list-element.store', ['user' => $user->id, 'list' => $list->id]) }}" enctype='multipart/form-data'> @csrf
     <div class="mb-3">
         <label for="exampleFormControlInput1" class="form-label">Text</label>
         <input name="description" type="text" class="form-control" id="exampleFormControlInput1">

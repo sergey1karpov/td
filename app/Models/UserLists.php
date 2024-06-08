@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class UserLists extends Model
 {
@@ -22,6 +23,6 @@ class UserLists extends Model
 
     public function elements(): HasMany
     {
-        return $this->hasMany(ListElements::class, 'list_id', 'id');
+        return $this->hasMany(ListElements::class, 'list_id', 'id')->orderByDesc('created_at');
     }
 }
