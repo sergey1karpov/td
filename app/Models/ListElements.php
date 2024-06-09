@@ -19,4 +19,9 @@ class ListElements extends Model
     {
         return $this->hasOne(Image::class, 'list_element_id', 'id')->select(['image', 'thumbnail']);
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'list_elements_tag', 'list_element_id', 'tag_id');
+    }
 }

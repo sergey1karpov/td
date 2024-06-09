@@ -4,6 +4,10 @@
         <input name="description" type="text" class="form-control" id="exampleFormControlInput1">
     </div>
     <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Укажите теги через запятую</label>
+        <input name="tags" placeholder="one, two, three" type="text" class="form-control" id="exampleFormControlInput1">
+    </div>
+    <div class="mb-3">
         <label for="formFile" class="form-label">Image</label>
         <input name="image" class="form-control" type="file" id="formFile">
     </div>

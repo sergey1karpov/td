@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ItemRequest;
 use App\Models\ListElements;
 use App\Models\ListUsers;
+use App\Models\Tag;
 use App\Models\User;
 use App\Models\UserLists;
 use App\Repositories\ListElementRepository;
@@ -12,6 +13,7 @@ use App\Services\ImageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ListElementController extends Controller
@@ -26,6 +28,15 @@ class ListElementController extends Controller
         $element = $list->elements()->create([
             'description' => $request->description,
         ]);
+
+
+        $clearTagString = str_replace(" ", "", $request->tags);
+        $tagArray = explode(",", $clearTagString);
+
+        foreach ($tagArray as $tag) {
+            $tagObj = Tag::create(['name' => $tag]);
+            $element->tags()->attach($tagObj);
+        }
 
         if ($request->hasFile('image')) {
             $imagePath = $this->imageService->uploadImage($request->file('image'));
