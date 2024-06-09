@@ -53,7 +53,7 @@ class UserListsController extends Controller
 
         $users = User::where('id', '<>', auth()->user()->id)->get();
 
-        $roles = array_column(RoleEnum::cases(), 'value');
+        $roles = array_diff(array_column(RoleEnum::cases(), 'value'), [RoleEnum::Admin->value]);
 
         return view('lists.list', compact('user', 'list', 'elements', 'users', 'roles'));
     }
