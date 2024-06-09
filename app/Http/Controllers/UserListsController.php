@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\RoleEnum;
 use App\Http\Requests\ListRequest;
 use App\Models\ListElements;
 use App\Models\User;
 use App\Models\UserLists;
 use App\Repositories\ListRepository;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class UserListsController extends Controller
@@ -49,6 +51,10 @@ class UserListsController extends Controller
     {
         $elements = $list->elements;
 
-        return view('lists.list', compact('user', 'list', 'elements'));
+        $users = User::where('id', '<>', auth()->user()->id)->get();
+
+        $roles = array_column(RoleEnum::cases(), 'value');
+
+        return view('lists.list', compact('user', 'list', 'elements', 'users', 'roles'));
     }
 }

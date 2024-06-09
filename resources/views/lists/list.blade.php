@@ -25,6 +25,35 @@
                     </div>
                 @endif
 
+                <div class="mb-5">
+                    <p><h6>Расшарить список</h6></p>
+                    <form method="post" action="{{ route('share', ['user' => $user->id, 'list' => $list->id]) }}">@csrf
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="formFile" class="form-label">Выбрать пользователя</label>
+                                <select name="user_id" class="form-select mb-2" aria-label="Default select example">
+                                    @foreach($users as $user)
+                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label for="formFile" class="form-label">Роль</label>
+                                <select name="role" class="form-select mb-2" aria-label="Default select example">
+                                    @foreach($roles as $role)
+                                        <option value="{{ $role }}">{{ $role }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary" type="submit">Create element</button>
+                        </div>
+                    </form>
+                </div>
+
                 @include('list_element.create')
 
                 @include('list_element.elements', ['elements' => $elements])

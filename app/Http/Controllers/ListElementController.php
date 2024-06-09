@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ItemRequest;
-use App\Models\Image;
 use App\Models\ListElements;
+use App\Models\ListUsers;
 use App\Models\User;
 use App\Models\UserLists;
 use App\Repositories\ListElementRepository;
 use App\Services\ImageService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ListElementController extends Controller
@@ -75,5 +76,16 @@ class ListElementController extends Controller
 
         return redirect()->route('list.show', ['user' => $user->id, 'list' => $list->id])
             ->with('success', 'Заметка удалена!');
+    }
+
+    public function shareList(User $user, UserLists $list, Request $request): RedirectResponse
+    {
+        ListUsers::updateOrCreate(
+            ['list_id' => $list->id, 'user_id' => $request->user_id],
+            ['user_id' => $request->user_id, 'list_id' => $list->id, 'role' => $request->role]
+        );
+
+        return redirect()->route('list.show', ['user' => $user->id, 'list' => $list->id])
+            ->with('success', 'Права доступа изменены');
     }
 }

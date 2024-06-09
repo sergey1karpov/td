@@ -30,4 +30,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::patch('/{user}/list/{list}/element/{element}/update', [ListElementController::class, 'update'])->name('list-element.update');
     Route::delete('/{user}/list/{list}/element/{element}/delete-image', [ListElementController::class, 'deleteImage'])->name('list-element.delete-image');
     Route::delete('/{user}/list/{list}/element/{element}/delete', [ListElementController::class, 'delete'])->name('list-element.delete');
+
+    Route::post('/{user}/list/{list}/share', [ListElementController::class, 'shareList'])->name('share');
 });
