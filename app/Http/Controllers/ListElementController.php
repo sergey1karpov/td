@@ -11,6 +11,7 @@ use App\Repositories\ListElementRepository;
 use App\Services\ImageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class ListElementController extends Controller
@@ -42,7 +43,9 @@ class ListElementController extends Controller
 
     public function edit(User $user, UserLists $list, ListElements $element): View
     {
-        return view('list_element.edit', compact('user', 'list', 'element'));
+        $authUserRole = Auth::user()->role->role;
+
+        return view('list_element.edit', compact('user', 'list', 'element', 'authUserRole'));
     }
 
     public function update(User $user, UserLists $list, ListElements $element, ItemRequest $request): RedirectResponse

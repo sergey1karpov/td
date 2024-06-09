@@ -3,8 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Couchbase\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -52,8 +54,8 @@ class User extends Authenticatable
             ->orderByDesc('created_at');
     }
 
-//    public function lists(): BelongsToMany
-//    {
-//        return $this->belongsToMany(UserLists::class, 'lists_users', 'user_id', 'id')->withPivot('role');
-//    }
+    public function role(): HasOne
+    {
+        return $this->hasOne(ListUsers::class);
+    }
 }

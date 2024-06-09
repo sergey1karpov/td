@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Enums\RoleEnum;
 use App\Http\Requests\ListRequest;
-use App\Models\ListElements;
 use App\Models\User;
 use App\Models\UserLists;
 use App\Repositories\ListRepository;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class UserListsController extends Controller
@@ -49,12 +48,14 @@ class UserListsController extends Controller
 
     public function show(User $user, UserLists $list): View
     {
+        $authUserRole = Auth::user()->role->role;
+
         $elements = $list->elements;
 
         $users = User::where('id', '<>', auth()->user()->id)->get();
 
         $roles = array_diff(array_column(RoleEnum::cases(), 'value'), [RoleEnum::Admin->value]);
 
-        return view('lists.list', compact('user', 'list', 'elements', 'users', 'roles'));
+        return view('lists.list', compact('user', 'list', 'elements', 'users', 'roles', 'authUserRole'));
     }
 }

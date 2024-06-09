@@ -24,7 +24,7 @@ class ListRequest extends FormRequest
     {
         return [
             'title' => 'required|string|min:3|max:50',
-            'description' => 'nullable|string|min:10|max:250',
+            'description' => 'required|string|min:10|max:250',
         ];
     }
 }

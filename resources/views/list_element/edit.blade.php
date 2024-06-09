@@ -48,6 +48,7 @@
                         <button class="btn btn-primary mb-1" type="submit">Изменить заметку</button>
                     </div>
                 </form>
+                @if($authUserRole == 'admin')
                     <div class="d-grid gap-2">
                         <form action="{{ route('list-element.delete', ['user' => $user->id, 'list' => $list->id, 'element' => $element->id]) }}" method="post">
                             @csrf @method('DELETE')
@@ -56,6 +57,7 @@
                             </div>
                         </form>
                     </div>
+                @endif
             </div>
         </div>
     </div>

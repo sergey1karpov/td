@@ -15,7 +15,7 @@ class ListRepository
      * @param string $description
      * @return void
      */
-    public function createList(User $user, string $title, string $description): void
+    public function createList(User $user, string $title, string $description = ''): void
     {
         $list = UserLists::create([
             'title' => $title,
@@ -33,7 +33,7 @@ class ListRepository
      * @param string $description
      * @return void
      */
-    public function updateList(UserLists $list, string $title, string $description): void
+    public function updateList(UserLists $list, string $title, string $description = ''): void
     {
         $list->update(['title' => $title, 'description' => $description]);
     }
