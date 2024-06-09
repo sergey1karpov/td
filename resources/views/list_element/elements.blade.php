@@ -1,10 +1,11 @@
 @foreach($elements as $element)
+
     <li class="list-group-item d-flex justify-content-between align-items-start mt-5">
         <div class="ms-2 me-auto">
             {{ $element->description }}
             <div class="mt-3">
                 @foreach($element->tags as $tag)
-                <span class="btn badge text-bg-primary">{{$tag->name}}</span>
+                    <span class="badge rounded-pill text-bg-light">{{$tag->name}}</span>
                 @endforeach
             </div>
         </div>

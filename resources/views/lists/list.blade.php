@@ -60,6 +60,24 @@
 
                 @include('list_element.elements', ['elements' => $elements])
             </div>
+            <div class="col-md-2 text-center">
+                <div class="mt-3 mb-3">
+                    <h4>Теги списка</h4>
+                    <form action="{{ route('searchByTag', ['user' => $user->id, 'list' => $list->id]) }}">
+                        @foreach($uniqElementTags as $tag)
+                            <div class="form-check">
+                                <input name="tag[]" class="form-check-input" type="checkbox" value="{{ $tag->name }}" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    {{ $tag->name }}
+                                </label>
+                            </div>
+                        @endforeach
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <button class="btn btn-primary" type="submit">Фильтровать</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

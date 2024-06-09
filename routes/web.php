@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\ListElementController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserListsController;
 use App\Http\Middleware\CheckAdminOrModerRoleMiddleware;
 use App\Http\Middleware\CheckAdminRoleMiddleware;
@@ -60,5 +61,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/{user}/list/{list}/element/{element}', [ListElementController::class, 'show'])
         ->name('list-element.show')
+        ->middleware(ShowListMiddleware::class);
+
+    Route::get('/{user}/list/{list}/search-by-tag', [TagController::class, 'searchByTag'])
+        ->name('searchByTag')
         ->middleware(ShowListMiddleware::class);
 });
