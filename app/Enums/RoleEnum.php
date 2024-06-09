@@ -7,4 +7,6 @@ enum RoleEnum: string
     case Admin = 'admin';
     case Moderator = 'moderator';
     case Reader = 'reader';
+
+    case Close = 'close';
 }

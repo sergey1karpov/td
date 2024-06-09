@@ -25,6 +25,7 @@ return new class extends Migration
                 RoleEnum::Admin->value,
                 RoleEnum::Moderator->value,
                 RoleEnum::Reader->value,
+                RoleEnum::Close->value,
             ])->default(RoleEnum::Admin->value);
             $table->timestamps();
         });

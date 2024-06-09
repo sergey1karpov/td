@@ -46,10 +46,8 @@
                                 </select>
                             </div>
                         </div>
-
-
                         <div class="d-grid gap-2">
-                            <button class="btn btn-primary" type="submit">Create element</button>
+                            <button class="btn btn-primary" type="submit">Изменить права доступа</button>
                         </div>
                     </form>
                 </div>
