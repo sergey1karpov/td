@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <h3 class="mb-5">Update {{ $list->title }}</h3>
+                <h3 class="mb-5">Обновить список: {{ $list->title }}</h3>
 
                 @if($errors->any())
                     <div class="alert alert-danger">
@@ -27,15 +27,15 @@
 
                 <form method="post" action="{{ route('list.update', ['user' => $user->id, 'list' => $list->id]) }}"> @csrf @method('PATCH')
                     <div class="mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Title</label>
+                        <label for="exampleFormControlInput1" class="form-label">Заголовок</label>
                         <input name="title" type="text" class="form-control" id="exampleFormControlInput1" value="{{ $list->title }}">
                     </div>
                     <div class="mb-3">
-                        <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                        <label for="exampleFormControlTextarea1" class="form-label">Описание</label>
                         <textarea name="description" class="form-control" id="exampleFormControlTextarea1" rows="3">{{ $list->description }}</textarea>
                     </div>
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary" type="submit">Update list</button>
+                        <button class="btn btn-primary" type="submit">Обновить список</button>
                     </div>
                 </form>
             </div>

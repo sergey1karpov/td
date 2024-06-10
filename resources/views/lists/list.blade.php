@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <h3 class="mb-5">Add new element to {{ $list->title }}</h3>
+                <h3 class="mb-5">Добавить новый элемент для {{ $list->title }}</h3>
 
                 @if ($errors->any())
                     <div class="alert alert-danger">

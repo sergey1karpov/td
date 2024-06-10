@@ -37,11 +37,11 @@
                 <form method="post" action="{{ route('list-element.update', ['user' => $user->id, 'list' => $list->id, 'element' => $element->id]) }}" enctype='multipart/form-data'>
                     @csrf @method('PATCH')
                     <div class="mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Text</label>
+                        <label for="exampleFormControlInput1" class="form-label">Текст</label>
                         <input name="description" type="text" class="form-control" id="exampleFormControlInput1" value="{{ $element->description }}">
                     </div>
                     <div class="mb-3">
-                        <label for="formFile" class="form-label">Image</label>
+                        <label for="formFile" class="form-label">Изображение</label>
                         <input name="image" class="form-control" type="file" id="formFile">
                     </div>
                     <div class="d-grid gap-2">

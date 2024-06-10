@@ -36,4 +36,17 @@ class ImageService
 
         return '/storage/' . $filename;
     }
+
+    /**
+     * Save Thumbnail in db
+     *
+     * @param UploadedFile $file
+     * @return array
+     */
+    public function saveThumbnail(UploadedFile $file): array
+    {
+        $imagePath = $this->uploadImage($file);
+        $thumbnailPath = $this->createThumbnail($file, $imagePath);
+        return ['imagePath' => $imagePath, 'thumbnailPath' => $thumbnailPath];
+    }
 }

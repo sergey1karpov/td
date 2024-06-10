@@ -7,6 +7,11 @@ use Illuminate\View\View;
 
 class IndexController extends Controller
 {
+    public function main(): View
+    {
+        return view('welcome');
+    }
+
     public function profile(User $user): View
     {
         return view('profile.profile', [

@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ListElements;
-use App\Models\Tag;
 use App\Models\User;
 use App\Models\UserLists;
+use App\Repositories\TagRepository;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class TagController extends Controller
 {
-    public function searchByTag(User $user, UserLists $list, Request $request)
+    public function __construct(private readonly TagRepository $tagRepository) {}
+
+    public function searchByTag(User $user, UserLists $list, Request $request): View|RedirectResponse
     {
         $inputTags = $request->input('tag');
 
@@ -19,20 +21,16 @@ class TagController extends Controller
             return redirect()->back();
         }
 
-        $tags = Tag::whereIn('name', $inputTags)
-            ->pluck('id');
+        $tagsIds = $this->tagRepository->getInputTagIds($inputTags);
 
-        $elements_ids = DB::table("list_elements_tag")
-            ->whereIn('tag_id', $tags)
-            ->pluck('list_element_id');
+        $elementsIds = $this->tagRepository->getElementsIdsFromPivot($tagsIds);
 
-        $elements = ListElements::whereIn('id', $elements_ids)->get();
+        $elements = $this->tagRepository->getElemetsByTags($elementsIds);
 
-        //Вывод всех тегов списка
-        $allElements = $list->elements->pluck('id');
-        $pivotElementsIds = DB::table("list_elements_tag")->whereIn('list_element_id', $allElements)->pluck('tag_id');
-        $uniqElementTags = Tag::whereIn('id', $pivotElementsIds)->distinct('name')->get();
+        $uniqElementTags = $this->tagRepository->getAllListTags($list->elements);
 
-        return view('list_element.filter', compact('user', 'list', 'elements', 'uniqElementTags', 'inputTags'));
+        return view('list_element.filter',
+            compact('user', 'list', 'elements', 'uniqElementTags', 'inputTags')
+        );
     }
 }

@@ -4,18 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Enums\RoleEnum;
 use App\Http\Requests\ListRequest;
-use App\Models\Tag;
 use App\Models\User;
 use App\Models\UserLists;
 use App\Repositories\ListRepository;
+use App\Repositories\TagRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class UserListsController extends Controller
 {
-    public function __construct(private readonly ListRepository $listRepository) {}
+    public function __construct(
+        private readonly ListRepository $listRepository,
+        private readonly TagRepository $tagRepository
+    ) {}
 
     public function create(User $user): View
     {
@@ -26,7 +28,7 @@ class UserListsController extends Controller
     {
         $this->listRepository->createList($user, $request->title, $request->description);
 
-        return redirect()->route('profile', ['user' => $user->id])->with('success', 'List created');
+        return redirect()->route('profile', ['user' => $user->id])->with('success', 'Список создан');
     }
 
     public function edit(User $user, UserLists $list): View
@@ -38,14 +40,14 @@ class UserListsController extends Controller
     {
         $this->listRepository->updateList($list, $request->title, $request->description);
 
-        return redirect()->route('profile', ['user' => $user->id])->with('success', 'List updated');
+        return redirect()->route('profile', ['user' => $user->id])->with('success', 'Список обновлен');
     }
 
     public function delete(User $user, UserLists $list): RedirectResponse
     {
         $list->delete();
 
-        return redirect()->route('profile', ['user' => $user->id])->with('success', 'List deleted');
+        return redirect()->route('profile', ['user' => $user->id])->with('success', 'Список удален');
     }
 
     public function show(User $user, UserLists $list): View
@@ -58,11 +60,10 @@ class UserListsController extends Controller
 
         $roles = array_diff(array_column(RoleEnum::cases(), 'value'), [RoleEnum::Admin->value]);
 
-        //Вывод всех тегов списка
-        $allElements = $list->elements->pluck('id');
-        $pivotElementsIds = DB::table("list_elements_tag")->whereIn('list_element_id', $allElements)->pluck('tag_id');
-        $uniqElementTags = Tag::whereIn('id', $pivotElementsIds)->distinct('name')->get();
+        $uniqElementTags = $this->tagRepository->getAllListTags($list->elements);
 
-        return view('lists.list', compact('user', 'list', 'elements', 'users', 'roles', 'authUserRole', 'uniqElementTags'));
+        return view('lists.list',
+            compact('user', 'list', 'elements', 'users', 'roles', 'authUserRole', 'uniqElementTags')
+        );
     }
 }

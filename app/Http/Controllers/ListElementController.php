@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ItemRequest;
 use App\Models\ListElements;
-use App\Models\ListUsers;
-use App\Models\Tag;
 use App\Models\User;
 use App\Models\UserLists;
 use App\Repositories\ListElementRepository;
@@ -13,7 +11,6 @@ use App\Services\ImageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ListElementController extends Controller
@@ -29,22 +26,15 @@ class ListElementController extends Controller
             'description' => $request->description,
         ]);
 
-
-        $clearTagString = str_replace(" ", "", $request->tags);
-        $tagArray = explode(",", $clearTagString);
-
-        foreach ($tagArray as $tag) {
-            $tagObj = Tag::create(['name' => $tag]);
-            $element->tags()->attach($tagObj);
-        }
+        $this->listElementRepository->saveListElementTags($request->tags, $element);
 
         if ($request->hasFile('image')) {
-            $imagePath = $this->imageService->uploadImage($request->file('image'));
-            $thumbnailPath = $this->imageService->createThumbnail($request->file('image'), $imagePath);
-            $this->listElementRepository->insertListItemImage($imagePath, $thumbnailPath, $element->id);
+            $paths = $this->imageService->saveThumbnail($request->file('image'));
+            $this->listElementRepository->insertListItemImage($paths['imagePath'], $paths['thumbnailPath'], $element->id);
         }
 
-        return redirect()->route('list.show', ['user' => $user, 'list' => $list])->with('success', 'List Item created');
+        return redirect()->route('list.show', ['user' => $user, 'list' => $list])
+            ->with('success', 'Элемент списка создан');
     }
 
     public function show(User $user, UserLists $list, ListElements $element): View
@@ -67,12 +57,12 @@ class ListElementController extends Controller
 
             $this->listElementRepository->deleteListElementImage($element->id);
 
-            $imagePath = $this->imageService->uploadImage($request->file('image'));
-            $thumbnailPath = $this->imageService->createThumbnail($request->file('image'), $imagePath);
-            $this->listElementRepository->insertListItemImage($imagePath, $thumbnailPath, $element->id);
+            $paths = $this->imageService->saveThumbnail($request->file('image'));
+            $this->listElementRepository->insertListItemImage($paths['imagePath'], $paths['thumbnailPath'], $element->id);
         }
 
-        return redirect()->route('list-element.show', ['user' => $user->id, 'list' => $list->id, 'element' => $element->id])
+        return redirect()
+            ->route('list-element.show', ['user' => $user->id, 'list' => $list->id, 'element' => $element->id])
             ->with('success', 'Заметка обновлена!');
     }
 
@@ -80,7 +70,8 @@ class ListElementController extends Controller
     {
         $this->listElementRepository->deleteListElementImage($element->id);
 
-        return redirect()->route('list-element.edit', ['user' => $user->id, 'list' => $list->id, 'element' => $element->id])
+        return redirect()
+            ->route('list-element.edit', ['user' => $user->id, 'list' => $list->id, 'element' => $element->id])
             ->with('success', 'Изображение удалено!');
     }
 
@@ -88,18 +79,17 @@ class ListElementController extends Controller
     {
         $element->delete();
 
-        return redirect()->route('list.show', ['user' => $user->id, 'list' => $list->id])
+        return redirect()
+            ->route('list.show', ['user' => $user->id, 'list' => $list->id])
             ->with('success', 'Заметка удалена!');
     }
 
     public function shareList(User $user, UserLists $list, Request $request): RedirectResponse
     {
-        ListUsers::updateOrCreate(
-            ['list_id' => $list->id, 'user_id' => $request->user_id],
-            ['user_id' => $request->user_id, 'list_id' => $list->id, 'role' => $request->role]
-        );
+        $this->listElementRepository->shareList($list->id, $request->user_id, $request->role);
 
-        return redirect()->route('list.show', ['user' => $user->id, 'list' => $list->id])
+        return redirect()
+            ->route('list.show', ['user' => $user->id, 'list' => $list->id])
             ->with('success', 'Права доступа изменены');
     }
 }

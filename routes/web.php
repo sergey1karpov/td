@@ -10,15 +10,13 @@ use App\Http\Middleware\PrivateMiddleware;
 use App\Http\Middleware\ShowListMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [IndexController::class, 'main'])->name('main');
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
     Route::group(['middleware' => PrivateMiddleware::class], function () {
         Route::get('/{user}', [IndexController::class, 'profile'])
             ->name('profile');
