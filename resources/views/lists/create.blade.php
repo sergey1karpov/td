@@ -25,20 +25,60 @@
                     </div>
                 @endif
 
+                <div id="info" class="alert alert-success text-center alert-dismissible fade show" role="alert" style="display: none">
+                    <strong>Список добавлен</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
                 <form method="post" action="{{ route('list.store', ['user' => $user->id]) }}"> @csrf
                     <div class="mb-3">
                         <label for="exampleFormControlInput1" class="form-label">Заголовок</label>
-                        <input name="title" type="text" class="form-control" id="exampleFormControlInput1">
+                        <input name="title" id="title" type="text" class="form-control">
                     </div>
                     <div class="mb-3">
                         <label for="exampleFormControlTextarea1" class="form-label">Описание</label>
-                        <textarea name="description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <textarea name="description" class="form-control" id="description" rows="3"></textarea>
                     </div>
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary" type="submit">Создать список</button>
+                        <button class="btn btn-primary" id="addList" type="button">Создать список</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 @endsection
+<script type="module">
+    $("#addList").click(function(e) {
+        e.preventDefault();
+
+        const title = $("#title").val();
+        const description = $("#description").val();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: "{{ route('list.store', ['user' => $user->id]) }}",
+            type: "POST",
+            data: {
+                title: title,
+                description: description,
+            },
+            success: function(data) {
+                $("#info").show();
+                $("#title").val("");
+                $("#description").val("");
+            },
+            error: function() {
+                alert('errorroror');
+            },
+
+        });
+
+    });
+</script>
